@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 class BaseRobot:
     def __init__(self, name: str, weight: int, coords=None) -> None:
         if coords is None:
@@ -44,11 +47,11 @@ class FlyingRobot(BaseRobot):
         self.coords[2] -= step
 
 class Cargo:
-    def __init__(self, weight: int = None):
+    def __init__(self, weight: int | None = None) -> None:
         self.weight = weight
 
 class DeliveryDrone(FlyingRobot):
-    def __init__(self, name: str, weight: int, max_load_weight: int, current_load: Cargo, coords=None) -> None:
+    def __init__(self, name: str, weight: int, max_load_weight: int, current_load: Cargo | None, coords=None) -> None:
         super().__init__(name=name, weight=weight, coords=coords)
         self.max_load_weight = max_load_weight
         self.current_load = current_load
@@ -56,7 +59,8 @@ class DeliveryDrone(FlyingRobot):
     def hook_load(self, cargo: Cargo) -> None:
         if self.current_load is None and cargo.weight <= self.max_load_weight:
             self.current_load = cargo
-            print(f"Current load is {self.current_load.weight}.")
+            if self.current_load:
+                print(f"Current load is {self.current_load.weight}.")
         else:
             print(f"Didn't hook cargo with weight {cargo.weight}, cargo with weight {self.current_load.weight} already in current load")
 
